@@ -145,7 +145,7 @@ class Dragging(object):
             X = [self.coordinates[0][0], self.coordinates[1][0]]
             Y = [self.coordinates[0][1], self.coordinates[1][1]]
             im1 = im.crop((min(X), min(Y), max(X), max(Y)))
-            im1.save(f"C:/Users/Gregoire/Documents/snapper/snap.jpeg")
+            im1.save(filesnap)
             im1.show()
         except:
             logger.info('- unable to crop snap')
