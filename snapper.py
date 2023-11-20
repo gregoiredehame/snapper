@@ -13,6 +13,7 @@ import maya.api.OpenMaya as om2
 import maya.api.OpenMayaUI as omui2
 
 import os
+import sys
 import platform
 import logging
 import subprocess
@@ -59,10 +60,21 @@ class Dragging(object):
         self.PIL = True
         try: from PIL import Image
         except ImportError:
-            self.PIL = None
-            Viewport().snap()
-            logger.warning('PIL python package is missing. dragging snappers wont work.')
-
+            if self.install(): self.PIL = True
+            else:    
+                Viewport().snap()
+                logger.warning('PIL python package is missing. dragging snappers wont work.')
+    
+    def install(self):
+        try:
+            subprocess.call(f'cd /d {os.path.dirname(sys.executable)} && mayapy -m pip install Pillow', shell=True)
+            logger.info("Successfully installed Pillow. Dragging Snaps will work once you'll re-open maya.")
+            return True
+        except subprocess.CalledProcessError as e:
+            pass
+        except Exception as e:
+            pass
+        
     def snap(self):
         if self.PIL:
             self.delete()
